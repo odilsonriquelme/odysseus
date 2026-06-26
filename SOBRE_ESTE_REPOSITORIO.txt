@@ -1,0 +1,64 @@
+REPOSITÓRIO: odysseus
+TIPO: Fork Público (espelho do upstream, branch dev)
+LINGUAGEM: Python (backend) + web (static/UI)
+URL (seu fork):    https://github.com/odilsonriquelme/odysseus
+UPSTREAM (fork de): https://github.com/pewdiepie-archdaemon/odysseus
+BRANCH PADRÃO: dev (recebe novidades primeiro; main é a versão mais "curada")
+
+DESCRIÇÃO
+---------
+Odysseus é um WORKSPACE DE IA SELF-HOSTED completo — roda na sua máquina/servidor e reúne
+chat, agentes, pesquisa, documentos, email, notas, calendário e workflows com modelos
+locais. Sobe via Docker (docker compose up) e abre em http://localhost:7000. É bem mais
+que "um chat self-hosted": é uma suíte de produtividade com IA, focada em privacidade
+(tudo local).
+
+RECURSOS PRINCIPAIS (do README)
+-------------------------------
+- Chat + Agentes — modelos locais/API, tools, MCP, arquivos, shell, skills e memória
+- Cookbook — recomendações de modelo conforme o hardware, download e serving
+- Deep Research — pesquisa web multi-etapa com leitura de fontes e geração de relatório
+- (+ documentos, email, notas, calendário — workspace completo)
+
+ARQUITETURA / ESTRUTURA
+-----------------------
+app.py / launcher.py → entrada da aplicação (servidor web + lançador)
+core/        → núcleo da aplicação (auth, models, lógica central)
+routes/      → rotas da API/web
+services/    → SERVIÇOS modulares, cada um uma capacidade:
+   memory   → memória de longo prazo do assistente
+   research → deep research (pesquisa web multi-etapa)
+   search   → busca (config com SearXNG em config/searxng)
+   stt      → speech-to-text (transcrição de voz)
+   tts      → text-to-speech (síntese de voz)
+   youtube  → integração/processamento de YouTube
+   faces    → reconhecimento/processamento facial
+   hwfit    → "hardware fit" (recomendação de modelos por hardware)
+   shell    → execução de shell
+   docs     → documentos
+mcp_servers/ → servidores MCP próprios: email_server, image_gen_server, memory_server,
+               rag_server (expõem capacidades como ferramentas MCP)
+integrations/→ integração com agentes externos: claude, codex
+companion/   → app/recurso companheiro
+config/      → configurações (inclui searxng)
+docker/ + docker-compose*.yml → deploy (inclui variantes GPU nvidia e amd)
+static/      → assets da interface web
+specs/, scripts/, tests/, docs/ → specs, scripts, testes e documentação
+
+EMPACOTAMENTO / INSTALAÇÃO
+--------------------------
+- Docker (padrão) + compose com variantes GPU (nvidia/amd)
+- build-macos-app.sh / Odysseus.spec → app nativo macOS (PyInstaller)
+- build-windows-portable.ps1 / launch-windows.ps1 / update_windows.bat → Windows
+- install-service.sh / odysseus-ui.service → instala como serviço (systemd)
+
+SEGURANÇA
+---------
+Projeto leva segurança a sério: THREAT_MODEL.md, SECURITY.md, e commits recentes com
+correções de segurança (redação de PII em logs, escape de CSS, auth). Atenção ao expor
+o serviço na rede.
+
+OBSERVAÇÃO (fork)
+-----------------
+Fork espelho do upstream pewdiepie-archdaemon/odysseus, na branch dev. README/código são
+de terceiros — não editar. Push deste repo vai só para o SEU fork.
